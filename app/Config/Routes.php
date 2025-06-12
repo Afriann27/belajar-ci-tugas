@@ -40,6 +40,11 @@ $routes->group('kategori', ['filter' => 'auth'], function ($routes) {
 
 // Keranjang
 $routes->get('keranjang', 'TransaksiController::index', ['filter' => 'auth', 'as' => 'keranjang']);
+$routes->get('checkout', 'TransaksiController::checkout', ['filter' => 'auth']);
+$routes->post('buy', 'TransaksiController::buy', ['filter' => 'auth']);
+
+$routes->get('get-location', 'TransaksiController::getLocation', ['filter' => 'auth']);
+$routes->get('get-cost', 'TransaksiController::getCost', ['filter' => 'auth']);
 
 // Halaman lain
 $routes->get('faq', 'Home::faq', ['filter' => 'auth', 'as' => 'faq']);
