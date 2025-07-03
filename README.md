@@ -5,10 +5,121 @@ Proyek ini adalah platform toko online yang dibangun menggunakan [CodeIgniter 4]
 ## Daftar Isi
 
 - [Fitur](#fitur)
-- [Persyaratan Sistem](#persyaratan-sistem)
-- [Instalasi](#instalasi)
-- [Struktur Proyek](#struktur-proyek)
+1. Katalog Produk
+Menampilkan daftar produk dengan gambar, harga, dan deskripsi.
+-Fitur pencarian produk berdasarkan nama.
+-Kategori produk untuk memudahkan pengelompokan.
 
+2. Keranjang Belanja
+-Tambah produk ke keranjang dari halaman katalog.
+-Update jumlah produk secara dinamis.
+-Hapus produk dari keranjang.
+
+3. Checkout & Transaksi
+-Form checkout untuk mengisi data pembelian.
+-Menampilkan total harga secara otomatis.
+-Menyimpan data transaksi ke database.
+-Halaman riwayat transaksi untuk pengguna.
+
+4. Sistem Diskon
+-Menampilkan daftar diskon yang tersedia.
+-Diskon ditampilkan dalam komponen sidebar halaman (tanpa redirect).
+-Admin dapat menambah/menghapus diskon melalui panel admin.
+
+5. Autentikasi dan Manajemen Pengguna
+-Login dan register untuk pelanggan.
+-Panel admin untuk mengelola produk, kategori, transaksi, dan diskon.
+-Hak akses dibatasi sesuai peran (admin atau pengguna biasa).
+
+6. Panel Admin (NiceAdmin)
+-CRUD Produk.
+-CRUD Kategori Produk.
+-Laporan Transaksi.
+-Export data ke PDF.
+-Pengelolaan diskon.
+
+7. Desain Responsif
+Menggunakan template NiceAdmin untuk tampilan modern dan responsif di semua perangkat.
+
+- [Persyaratan Sistem](#persyaratan-sistem)
+
+
+- [Instalasi](#instalasi)
+Untuk menjalankan proyek ini di lingkungan lokal, ikuti langkah-langkah berikut:
+
+1. Clone Repository
+Unduh salinan kode dari repository Git menggunakan perintah berikut:
+
+git clone [URL repository]
+cd afrian-project
+
+2. Install Dependensi
+Pastikan Composer sudah terinstal, lalu jalankan perintah:
+composer install
+Ini akan mengunduh semua dependensi yang dibutuhkan oleh proyek.
+
+
+3. Konfigurasi Database
+
+-Buka XAMPP dan aktifkan modul Apache dan MySQL.
+-Masuk ke phpMyAdmin dan buat database baru dengan nama db_ci4.
+-Salin file .env.example menjadi .env jika belum tersedia.
+-Edit file .env dan sesuaikan konfigurasi database:
+
+database.default.hostname = localhost
+database.default.database = db_ci4
+database.default.username = root
+database.default.password =
+
+4. Jalankan Migrasi dan Seeder
+Untuk membuat struktur tabel dan mengisi data awal:
+
+php spark migrate
+php spark db:seed ProductSeeder
+php spark db:seed UserSeeder
+php spark db:seed DiskonSeeder
+
+5. Menjalankan Server Lokal
+Gunakan perintah berikut untuk memulai server:
+php spark serve
+Aplikasi dapat diakses melalui browser di alamat:
+http://localhost:8080
+
+- [Struktur Proyek](#struktur-proyek)
+afrian-project/
+│
+├── app/
+│   ├── Controllers/
+│   │   ├── AuthController.php         # Autentikasi pengguna
+│   │   ├── ProdukController.php       # Menampilkan katalog produk
+│   │   ├── CartController.php         # Logika keranjang belanja
+│   │   ├── CheckoutController.php     # Form checkout dan penyimpanan transaksi
+│   │   ├── AdminController.php        # Panel admin dan manajemen data
+│   │   └── DiskonController.php       # Komponen diskon sidebar
+│   │
+│   ├── Models/
+│   │   ├── ProductModel.php
+│   │   ├── UserModel.php
+│   │   ├── DiskonModel.php
+│   │   └── TransaksiModel.php
+│   │
+│   ├── Views/
+│   │   ├── layout.php                 # Template utama
+│   │   ├── v_produk.php              # Halaman produk
+│   │   ├── v_keranjang.php           # Halaman keranjang
+│   │   ├── v_checkout.php            # Halaman checkout
+│   │   ├── v_diskon.php              # Komponen sidebar diskon
+│   │   └── admin/                    # Template admin (NiceAdmin)
+│
+├── public/
+│   ├── img/                           # Gambar produk
+│   ├── NiceAdmin/                     # Template UI Admin
+│   └── index.php                      # Entry point aplikasi
+│
+├── writable/                          # File log, cache, uploads
+├── .env                               # Konfigurasi database & environment
+├── composer.json                      # Dependensi Composer
+└── README.md                          # Dokumentasi proyek
 ## Fitur
 
 - Katalog Produk
