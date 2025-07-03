@@ -137,6 +137,16 @@ public function getCost()
     $body = json_decode($response->getBody(), true); 
     return $this->response->setJSON($body['data']);
     }
+    public function selesaikan($id)
+{
+    $this->transaction->update($id, [
+        'status' => 1,
+        'updated_at' => date("Y-m-d H:i:s")
+    ]);
+
+    return redirect()->back()->with('success', 'Transaksi berhasil ditandai sebagai selesai.');
+}
+
     public function buy()
     {
         if ($this->request->getPost()) { 
@@ -167,6 +177,7 @@ public function getCost()
 
                 $this->transaction_detail->insert($dataFormDetail);
             }
+        
 
             $this->cart->destroy();
     

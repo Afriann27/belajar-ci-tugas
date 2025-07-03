@@ -75,7 +75,7 @@
 <div class="modal fade" id="addModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form action="<?= base_url('kategori') ?>" method="post">
+            <form action="<?= base_url('kategor   i') ?>" method="post">
                 <?= csrf_field(); ?>
                 <div class="modal-header">
                     <h5 class="modal-title">Tambah Kategori</h5>

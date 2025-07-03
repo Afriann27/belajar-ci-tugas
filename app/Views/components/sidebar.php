@@ -25,6 +25,15 @@
             </a>
         </li><!-- End Kategori Nav -->
 
+        <?php if (session('role') === 'admin'): ?>
+    <li class="nav-item">
+        <a class="nav-link" href="<?= base_url('/diskon') ?>">
+            <i class="bi bi-cash-coin"></i> Diskon
+        </a>
+    </li>
+<?php endif; ?>
+
+
         <?php if (session()->get('role') == 'admin') { ?>
             <li class="nav-item">
                 <a class="nav-link <?php echo (uri_string() == 'produk') ? "" : "collapsed" ?>" href="<?= base_url('produk') ?>">

@@ -2,7 +2,6 @@
 <?= $this->section('content') ?>
 <div class="row">
     <div class="col-lg-6">
-        <!-- Vertical Form -->
         <?= form_open('buy', 'class="row g-3"') ?>
         <?= form_hidden('username', session()->get('username')) ?>
         <?= form_input(['type' => 'hidden', 'name' => 'total_harga', 'id' => 'total_harga', 'value' => '']) ?>
@@ -28,9 +27,7 @@
         </div>
     </div>
     <div class="col-lg-6">
-        <!-- Vertical Form -->
         <div class="col-12">
-            <!-- Default Table -->
             <table class="table">
                 <thead>
                     <tr>
@@ -41,42 +38,35 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    $i = 1;
-                    if (!empty($items)) :
-                        foreach ($items as $index => $item) :
-                    ?>
-                            <tr>
-                                <td><?php echo $item['name'] ?></td>
-                                <td><?php echo number_to_currency($item['price'], 'IDR') ?></td>
-                                <td><?php echo $item['qty'] ?></td>
-                                <td><?php echo number_to_currency($item['price'] * $item['qty'], 'IDR') ?></td>
-                            </tr>
-                    <?php
-                        endforeach;
-                    endif;
-                    ?>
+                    <?php if (!empty($items)) : foreach ($items as $item) : ?>
+                    <tr>
+                        <td><?= $item['name'] ?></td>
+                        <td><?= number_to_currency($item['price'], 'IDR') ?></td>
+                        <td><?= $item['qty'] ?></td>
+                        <td><?= number_to_currency($item['price'] * $item['qty'], 'IDR') ?></td>
+                    </tr>
+                    <?php endforeach; endif; ?>
                     <tr>
                         <td colspan="2"></td>
                         <td>Subtotal</td>
-                        <td><?php echo number_to_currency($total, 'IDR') ?></td>
+                        <td><?= number_to_currency($total, 'IDR') ?></td>
                     </tr>
                     <tr>
                         <td colspan="2"></td>
                         <td>Total</td>
-                        <td><span id="total"><?php echo number_to_currency($total, 'IDR') ?></span></td>
+                        <td><span id="total"><?= number_to_currency($total, 'IDR') ?></span></td>
                     </tr>
                 </tbody>
             </table>
-            <!-- End Default Table Example -->
         </div>
         <div class="text-center">
             <button type="submit" class="btn btn-primary">Buat Pesanan</button>
         </div>
-        </form><!-- Vertical Form -->
+        </form>
     </div>
 </div>
 <?= $this->endSection() ?>
+
 <?= $this->section('script') ?>
 <script>
 $(document).ready(function() {
@@ -86,30 +76,29 @@ $(document).ready(function() {
     hitungTotal();
 
     $('#kelurahan').select2({
-    placeholder: 'Ketik nama kelurahan...',
-    ajax: {
-        url: '<?= base_url('get-location') ?>',
-        dataType: 'json',
-        delay: 1500,
-        data: function (params) {
-            return {
-                search: params.term
-            };
-        },
-        processResults: function (data) {
-            return {
-                results: data.map(function(item) {
+        placeholder: 'Ketik nama kelurahan...',
+        ajax: {
+            url: '<?= base_url('get-location') ?>',
+            dataType: 'json',
+            delay: 1500,
+            data: function (params) {
+                return { search: params.term };
+            },
+            processResults: function (data) {
                 return {
-                    id: item.id,
-                    text: item.subdistrict_name + ", " + item.district_name + ", " + item.city_name + ", " + item.province_name + ", " + item.zip_code
+                    results: data.map(function(item) {
+                        return {
+                            id: item.id,
+                            text: item.subdistrict_name + ", " + item.district_name + ", " + item.city_name + ", " + item.province_name + ", " + item.zip_code
+                        };
+                    })
                 };
-                })
-            };
+            },
+            cache: true
         },
-        cache: true
-    },
-    minimumInputLength: 3
+        minimumInputLength: 3
     });
+
     $("#kelurahan").on('change', function() {
         var id_kelurahan = $(this).val(); 
         $("#layanan").empty();
@@ -118,19 +107,21 @@ $(document).ready(function() {
         $.ajax({
             url: "<?= site_url('get-cost') ?>",
             type: 'GET',
-            data: { 
-                'destination': id_kelurahan, 
-            },
+            data: { destination: id_kelurahan },
             dataType: 'json',
             success: function(data) { 
                 data.forEach(function(item) {
-                    var text = item["description"] + " (" + item["service"] + ") : estimasi " + item["etd"] + "";
+                    var text = item["description"] + " (" + item["service"] + ") : estimasi " + item["etd"];
                     $("#layanan").append($('<option>', {
                         value: item["cost"],
                         text: text 
                     }));
                 });
-                hitungTotal(); 
+
+                // Pilih otomatis layanan pertama
+                if (data.length > 0) {
+                    $("#layanan").val(data[0]["cost"]).trigger('change');
+                }
             },
         });
     });
@@ -142,7 +133,6 @@ $(document).ready(function() {
 
     function hitungTotal() {
         total = ongkir + <?= $total ?>;
-
         $("#ongkir").val(ongkir);
         $("#total").html("IDR " + total.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'));
         $("#total_harga").val(total);
@@ -150,4 +140,3 @@ $(document).ready(function() {
 });
 </script>
 <?= $this->endSection() ?>
-

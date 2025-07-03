@@ -22,7 +22,7 @@ class ApiController extends ResourceController
         $this->user = new UserModel();
         $this->transaction = new TransactionModel();
         $this->transaction_detail = new TransactionDetailModel();
-
+        
     }
 
     /**
@@ -122,4 +122,16 @@ class ApiController extends ResourceController
     {
         //
     }
+    public function setSelesai($id)
+{
+    $transaction = new \App\Models\TransactionModel();
+
+    if ($transaction->find($id)) {
+        $transaction->update($id, ['status' => 1]);
+        return $this->response->setJSON(['success' => true, 'message' => 'Transaksi selesai']);
+    }
+
+    return $this->response->setJSON(['success' => false, 'message' => 'Data tidak ditemukan']);
+}
+
 }

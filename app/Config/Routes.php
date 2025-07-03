@@ -43,6 +43,29 @@ $routes->get('keranjang', 'TransaksiController::index', ['filter' => 'auth', 'as
 $routes->get('checkout', 'TransaksiController::checkout', ['filter' => 'auth']);
 $routes->post('buy', 'TransaksiController::buy', ['filter' => 'auth']);
 
+// diskon
+$routes->get('/diskon/create', 'DiskonController::create');
+$routes->post('/diskon/save', 'DiskonController::save');
+$routes->get('/diskon/edit/(:num)', 'DiskonController::edit/$1');
+$routes->post('/diskon/update/(:num)', 'DiskonController::update/$1');
+$routes->get('/diskon/delete/(:num)', 'DiskonController::delete/$1');
+$routes->get('/diskon/form', 'DiskonController::form', ['filter' => 'role:admin']);
+$routes->get('/diskon/form/(:num)', 'DiskonController::form/$1', ['filter' => 'role:admin']);
+
+$routes->get('/keranjang', 'KeranjangController::index');
+$routes->post('/keranjang/add', 'KeranjangController::add');
+$routes->post('/keranjang/edit', 'KeranjangController::edit');
+$routes->get('/keranjang/delete/(:any)', 'KeranjangController::delete/$1');
+$routes->get('/keranjang/clear', 'KeranjangController::clear');
+$routes->get('transaksi/selesaikan/(:num)', 'TransaksiController::selesaikan/$1');
+
+$routes->post('/api/status/selesai/(:num)', 'ApiController::setSelesai/$1');
+
+//rolefilter
+$routes->get('/diskon', 'DiskonController::index');
+
+
+
 $routes->get('get-location', 'TransaksiController::getLocation', ['filter' => 'auth']);
 $routes->get('get-cost', 'TransaksiController::getCost', ['filter' => 'auth']);
 

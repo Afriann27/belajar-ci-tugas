@@ -23,6 +23,31 @@ class ProdukController extends BaseController
 
         return view('v_produk', $data);
     }
+
+
+public function beli($id)
+{
+    $cart = \Config\Services::cart();
+    $produkModel = new ProdukModel();
+    $produk = $produkModel->find($id);
+
+    if (!$produk) {
+        return redirect()->to('/')->with('error', 'Produk tidak ditemukan');
+    }
+
+    $diskon = session()->get('diskon') ?? 0;
+    $hargaSetelahDiskon = max(0, $produk['harga'] - $diskon); // pastikan tidak negatif
+
+    $cart->insert([
+        'id'      => $produk['id'],
+        'qty'     => 1,
+        'price'   => $hargaSetelahDiskon,
+        'name'    => $produk['nama']
+    ]);
+
+    return redirect()->to('/keranjang')->with('success', 'Produk ditambahkan ke keranjang');
+}
+
     public function create()
     {
     $dataFoto = $this->request->getFile('foto');
